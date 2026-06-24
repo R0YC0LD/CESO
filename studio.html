@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>müzikHan · STÜDYO</title>
+<link rel="icon" type="image/png" href="simge.png?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030303; --card:#0a0a0a; --line:rgba(255,255,255,.07);
+  --line-strong:rgba(255,255,255,.16);
+  --txt:#ededed; --mut:#7a7a7a; --dim:#444;
+  --accent:#ffffff; --gold:#e3b341; --bad:#ff5d5d; --good:#4ade80; --green:#22c55e;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:#222;border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:#444;}
+#bg-glow{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(700px 500px at 50% -5%,rgba(255,255,255,.06),transparent 70%);}
+.mono{font-family:'Space Mono',monospace;}
+.disp{font-family:'Syncopate',sans-serif;}
+.eyebrow{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:4px;color:var(--dim);text-transform:uppercase;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+a{color:inherit;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--txt);font-size:.8rem;font-weight:600;letter-spacing:.3px;transition:.25s;width:100%;}
+.btn:hover{border-color:var(--line-strong);background:rgba(255,255,255,.05);}
+.btn-primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;}
+.btn-primary:hover{box-shadow:0 0 24px rgba(255,255,255,.25);background:#fff;}
+.btn-ghost{background:transparent;}
+.btn-danger{border-color:rgba(255,93,93,.3);color:#ff8a8a;}
+.btn-danger:hover{background:rgba(255,93,93,.08);border-color:var(--bad);}
+.btn-green{background:var(--green);color:#04210f;border-color:var(--green);font-weight:700;}
+.btn-green:hover{box-shadow:0 0 26px rgba(34,197,94,.45);background:#2bd66b;}
+.btn-sm{padding:9px 12px;font-size:.7rem;border-radius:9px;width:auto;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* AUTH */
+#view-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.auth-box{width:100%;max-width:390px;}
+.auth-logo{text-align:center;margin-bottom:32px;}
+.auth-logo .disp{font-size:1.9rem;letter-spacing:5px;text-shadow:0 0 30px rgba(255,255,255,.25);}
+.auth-logo .sub{margin-top:10px;font-size:.58rem;letter-spacing:6px;color:var(--mut);}
+.auth-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:.62rem;letter-spacing:2px;color:var(--mut);margin-bottom:7px;text-transform:uppercase;font-family:'Space Mono',monospace;}
+.input{width:100%;padding:13px 14px;background:#060606;border:1px solid var(--line);border-radius:11px;color:var(--txt);font-size:.85rem;transition:.2s;}
+.input:focus{outline:none;border-color:var(--line-strong);box-shadow:0 0 0 3px rgba(255,255,255,.04);}
+.input::placeholder{color:#3a3a3a;}
+textarea.input{resize:vertical;min-height:90px;line-height:1.6;}
+select.input{appearance:none;}
+.msg{font-size:.72rem;margin-top:12px;min-height:16px;line-height:1.5;font-family:'Space Mono',monospace;}
+.msg.err{color:var(--bad);}
+.msg.ok{color:var(--good);}
+.link-line{text-align:center;margin-top:16px;font-size:.72rem;color:var(--mut);}
+.link-line b{color:var(--accent);cursor:pointer;border-bottom:1px solid transparent;}
+.link-line b:hover{border-color:var(--accent);}
+
+/* APP SHELL */
+#view-app{display:none;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(3,3,3,.72);border-bottom:1px solid var(--line);}
+.topbar-inner{max-width:960px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;gap:12px;position:relative;}
+.brand{font-family:'Syncopate',sans-serif;font-size:.92rem;letter-spacing:2px;white-space:nowrap;}
+.brand small{display:block;font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:3px;color:var(--dim);font-weight:400;margin-top:3px;}
+.nav{display:flex;gap:6px;margin-left:auto;align-items:center;flex-wrap:wrap;}
+.nav button{padding:9px 13px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--mut);font-size:.7rem;font-weight:600;letter-spacing:.5px;font-family:'Space Mono',monospace;transition:.2s;white-space:nowrap;}
+.nav button:hover{color:var(--txt);}
+.nav button.active{color:var(--txt);border-color:var(--line);background:rgba(255,255,255,.04);}
+.nav button.hidden{display:none;}
+.bell{position:relative;width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--txt);font-size:1.05rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
+.bell:hover{border-color:var(--line-strong);background:rgba(255,255,255,.06);}
+.bell .dot{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:10px;background:var(--bad);color:#fff;font-size:.6rem;font-weight:700;font-family:'Space Mono',monospace;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);}
+.bell .dot.show{display:flex;}
+.user-chip{display:flex;align-items:center;gap:9px;padding:7px 11px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.03);cursor:pointer;flex-shrink:0;transition:.2s;}
+.user-chip:hover{border-color:var(--line-strong);}
+.user-chip .uc-av{width:26px;height:26px;border-radius:50%;background:#161616;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Syncopate',sans-serif;font-size:.62rem;color:#888;overflow:hidden;}
+.user-chip .uc-name{font-family:'Space Mono',monospace;font-size:.74rem;font-weight:700;}
+.user-chip .uc-role{font-size:.54rem;letter-spacing:1px;color:var(--mut);text-transform:uppercase;}
+.user-chip .caret{color:var(--mut);font-size:.6rem;}
+.usermenu{position:absolute;top:calc(100% + 8px);right:18px;z-index:80;background:var(--card);border:1px solid var(--line-strong);border-radius:13px;padding:6px;min-width:190px;display:none;box-shadow:0 20px 50px rgba(0,0,0,.6);}
+.usermenu.open{display:block;animation:fade .2s ease;}
+.usermenu button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:12px 13px;border-radius:9px;border:none;background:transparent;color:var(--txt);font-size:.78rem;font-family:'Inter',sans-serif;transition:.15s;}
+.usermenu button:hover{background:rgba(255,255,255,.05);}
+.usermenu .logout{color:#ff8a8a;}
+.nav-toggle{display:none;width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--txt);font-size:1.15rem;line-height:1;align-items:center;justify-content:center;flex-shrink:0;}
+
+.wrap{max-width:960px;margin:0 auto;padding:26px 18px 90px;}
+.tab{display:none;}
+.tab.active{display:block;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin:6px 0 18px;gap:12px;flex-wrap:wrap;}
+.section-head h2{font-family:'Syncopate',sans-serif;font-size:1.05rem;letter-spacing:1px;}
+.section-head .eyebrow{margin-bottom:6px;}
+
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px;}
+.dash-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;}
+.dash-card .n{font-family:'Syncopate',sans-serif;font-size:1.7rem;}
+.dash-card .l{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase;margin-top:8px;}
+.hello{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:22px;}
+.hello .h{font-family:'Syncopate',sans-serif;font-size:1.2rem;}
+.hello .s{font-size:.78rem;color:var(--mut);margin-top:8px;line-height:1.6;}
+.role-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:1px;padding:4px 10px;border-radius:20px;border:1px solid var(--line-strong);text-transform:uppercase;margin-top:10px;}
+.role-yonetici{color:var(--gold);border-color:rgba(227,179,65,.45);}
+.role-ekip{color:#7dd3fc;border-color:rgba(125,211,252,.4);}
+.role-sanatci{color:#f0abfc;border-color:rgba(240,171,252,.4);}
+.role-produktor{color:var(--good);border-color:rgba(74,222,128,.4);}
+
+/* LISTE KARTLARI */
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:16px;transition:.25s;}
+.card:hover{border-color:var(--line-strong);}
+.card-head{display:flex;gap:14px;padding:16px 16px 12px;align-items:flex-start;position:relative;}
+.cover{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#111;border:1px solid var(--line);}
+.cover img{width:100%;height:100%;object-fit:cover;}
+.cover .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#444;}
+.card-id{flex:1;min-width:0;}
+.card-title{font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;letter-spacing:.3px;word-break:break-word;}
+.card-sub{font-size:.68rem;color:var(--mut);margin-top:4px;line-height:1.5;}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+.tag{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.5px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--mut);}
+.tag.gold{color:var(--gold);border-color:rgba(227,179,65,.35);}
+.tag.bad{color:#ff9a9a;border-color:rgba(255,93,93,.35);}
+.tag.good{color:var(--good);border-color:rgba(74,222,128,.35);}
+.prodby{position:absolute;right:14px;bottom:8px;font-family:'Space Mono',monospace;font-size:.56rem;color:var(--dim);letter-spacing:.5px;}
+.card audio{width:calc(100% - 32px);margin:2px 16px 12px;filter:grayscale(1) invert(.92);}
+.card-actions{display:flex;gap:8px;padding:0 16px 16px;flex-wrap:wrap;align-items:center;}
+.linklike{background:none;border:none;color:var(--mut);font-size:.7rem;font-family:'Space Mono',monospace;letter-spacing:.5px;padding:6px 2px;}
+.linklike:hover{color:var(--txt);}
+.linklike.del:hover{color:var(--bad);}
+.dl-link{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--gold);text-decoration:none;border:1px solid rgba(227,179,65,.3);padding:8px 12px;border-radius:9px;transition:.2s;}
+.dl-link:hover{background:rgba(227,179,65,.08);}
+.lyrics-box{padding:0 16px 14px;}
+.lyrics-pre{white-space:pre-wrap;font-size:.76rem;line-height:1.7;color:#c2c2c2;background:#060606;border:1px solid var(--line);border-radius:12px;padding:12px;max-height:220px;overflow:auto;}
+
+/* STARS */
+.rate-row{margin-bottom:16px;}
+.rate-row .rl{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:1px;color:var(--mut);margin-bottom:7px;text-transform:uppercase;}
+.stars{display:flex;gap:6px;}
+.star{font-size:1.5rem;line-height:1;color:#2a2a2a;cursor:pointer;transition:.15s;}
+.star.on{color:var(--gold);text-shadow:0 0 12px rgba(227,179,65,.4);}
+.star:hover{transform:scale(1.15);}
+.score-pill{font-family:'Syncopate',sans-serif;font-size:.85rem;color:var(--gold);}
+
+/* ROWS (admin/list) */
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:10px;flex-wrap:wrap;}
+.row .grow{flex:1;min-width:0;}
+.row .t{font-family:'Space Mono',monospace;font-size:.82rem;word-break:break-word;}
+.row .s{font-size:.64rem;color:var(--mut);margin-top:3px;word-break:break-all;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line-strong);border-radius:20px;padding:24px;max-height:92vh;overflow:auto;}
+.modal.wide{max-width:540px;}
+.modal h3{font-family:'Syncopate',sans-serif;font-size:.95rem;letter-spacing:1px;margin-bottom:18px;}
+.filedrop{border:1px dashed var(--line-strong);border-radius:13px;padding:20px;text-align:center;cursor:pointer;transition:.2s;}
+.filedrop:hover{border-color:#fff;background:rgba(255,255,255,.02);}
+.filedrop .ic{font-size:1.5rem;}
+.filedrop .t{font-family:'Space Mono',monospace;font-size:.7rem;margin-top:8px;color:var(--mut);word-break:break-all;}
+.filedrop.has{border-style:solid;border-color:var(--good);}
+.filedrop.has .t{color:var(--good);}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.progress{height:4px;border-radius:6px;background:#161616;overflow:hidden;margin-top:14px;display:none;}
+.progress.show{display:block;}
+.progress>i{display:block;height:100%;width:0;background:#fff;transition:width .2s;}
+.check-row{display:flex;align-items:flex-start;gap:12px;background:#060606;border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:12px;}
+.check-row .cr-t{font-size:.78rem;font-weight:600;}
+.check-row .cr-s{font-size:.64rem;color:var(--mut);margin-top:3px;line-height:1.5;}
+.seg{display:flex;gap:8px;flex-shrink:0;}
+.seg button{padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--mut);font-family:'Space Mono',monospace;font-size:.66rem;transition:.2s;}
+.seg button.on-yes{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--good);}
+.seg button.on-no{background:rgba(255,93,93,.12);border-color:var(--bad);color:#ff9a9a;}
+.agree-link{color:var(--gold);text-decoration:underline;cursor:pointer;}
+.agree-text{font-size:.74rem;line-height:1.75;color:#c2c2c2;max-height:50vh;overflow:auto;background:#060606;border:1px solid var(--line);border-radius:12px;padding:16px;}
+.agree-text h4{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--txt);margin:14px 0 6px;letter-spacing:1px;}
+.agree-text p{margin-bottom:9px;}
+
+/* MISC */
+.empty-state{text-align:center;padding:50px 20px;color:var(--dim);}
+.empty-state .ic{font-size:2rem;opacity:.4;}
+.empty-state .t{font-family:'Space Mono',monospace;font-size:.78rem;margin-top:12px;letter-spacing:1px;}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.center-load{text-align:center;padding:60px 0;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:#fff;color:#000;font-family:'Space Mono',monospace;font-size:.74rem;font-weight:700;padding:12px 20px;border-radius:12px;z-index:500;transition:.4s cubic-bezier(.2,.8,.2,1);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.hidden{display:none!important;}
+.notif-pop{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-180%);z-index:600;background:var(--card);border:1px solid var(--line-strong);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;max-width:90vw;box-shadow:0 18px 50px rgba(0,0,0,.6);transition:.45s cubic-bezier(.2,.8,.2,1);}
+.notif-pop.show{transform:translateX(-50%) translateY(0);}
+.notif-pop .np-ic{font-size:1.15rem;}
+.notif-pop .np-t{font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;}
+.notif-pop .np-s{font-size:.66rem;color:var(--mut);margin-top:2px;max-width:62vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.req-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:13px;padding:11px 12px;margin-bottom:10px;}
+.req-row .grow{flex:1;min-width:0;}
+
+@media(max-width:760px){
+  .topbar-inner{padding:12px 14px;flex-wrap:wrap;}
+  .brand small{display:none;}
+  .nav-toggle{display:flex;}
+  .user-chip .uc-meta{display:none;}
+  .nav{position:absolute;top:calc(100% + 8px);left:12px;right:12px;margin-left:0;flex-direction:column;gap:4px;align-items:stretch;background:var(--card);border:1px solid var(--line-strong);border-radius:16px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.6);display:none;}
+  .nav.open{display:flex;}
+  .nav button{width:100%;text-align:left;padding:14px 15px;font-size:.78rem;}
+  .usermenu{right:12px;}
+}
+</style>
+</head>
+<body>
+<div id="bg-glow"></div>
+
+<!-- ============ LOGIN ============ -->
+<div id="view-login">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="disp">müzikHan</div>
+      <div class="sub mono">STÜDYO · LABEL PANELİ</div>
+    </div>
+    <div class="auth-card">
+      <div id="setup-name" class="field hidden">
+        <label>Yönetici Adı</label>
+        <input id="l-name" class="input" placeholder="örn. Onur" autocomplete="name">
+      </div>
+      <div class="field">
+        <label>E-posta</label>
+        <input id="l-email" type="email" class="input" placeholder="seninadin@mail.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Şifre</label>
+        <input id="l-pass" type="password" class="input" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button id="l-submit" class="btn btn-primary">Giriş Yap</button>
+      <div id="l-msg" class="msg"></div>
+      <div class="link-line">
+        <span id="setup-hint">İlk kurulum mu?</span> <b id="setup-toggle">Yönetici hesabı oluştur</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="view-app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">müzikHan<small>STÜDYO</small></div>
+      <div class="nav" id="nav-menu">
+        <button data-tab="dash" class="active">PANEL</button>
+        <button data-tab="demos" data-roles="yonetici,ekip">DEMOLAR</button>
+        <button data-tab="release" data-roles="yonetici,ekip,sanatci">YAYIN</button>
+        <button data-tab="mutfak" data-roles="yonetici,ekip,produktor">MUTFAK</button>
+        <button data-tab="stems" data-roles="yonetici,ekip,produktor">STEMS</button>
+        <button data-tab="admin" data-roles="yonetici">YÖNETİM</button>
+      </div>
+      <button class="bell" id="bell-btn" aria-label="Bildirimler">🔔<span class="dot" id="bell-dot">0</span></button>
+      <div class="user-chip" id="user-chip">
+        <div class="uc-av" id="uc-av">?</div>
+        <div class="uc-meta">
+          <div class="uc-name" id="uc-name">—</div>
+          <div class="uc-role" id="uc-role">—</div>
+        </div>
+        <div class="caret">▼</div>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Menü">☰</button>
+      <div class="usermenu" id="usermenu">
+        <button id="um-settings">⚙ Ayarlar</button>
+        <button id="um-logout" class="logout">⏻ Oturumu kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- DASHBOARD -->
+    <div class="tab active" id="tab-dash">
+      <div class="hello">
+        <div class="h">Merhaba, <span id="dash-name">—</span></div>
+        <div class="s" id="dash-sub">müzikHan stüdyo paneline hoş geldin.</div>
+        <div id="dash-role"></div>
+      </div>
+      <div class="dash-grid" id="dash-grid"></div>
+    </div>
+
+    <!-- DEMOS -->
+    <div class="tab" id="tab-demos">
+      <div class="section-head">
+        <div><div class="eyebrow">Değerlendirme</div><h2>Demolar</h2></div>
+        <button class="btn btn-sm btn-primary" id="demo-add" style="width:auto;">+ Demo Yükle</button>
+      </div>
+      <div id="demo-list"><div class="center-load"><span class="spinner"></span></div></div>
+    </div>
+
+    <!-- RELEASE -->
+    <div class="tab" id="tab-release">
+      <div class="section-head">
+        <div><div class="eyebrow">Distribütör</div><h2>Yayınlar</h2></div>
+        <button class="btn btn-sm btn-green" id="release-add" style="width:auto;">+ Şarkı Yükle</button>
+      </div>
+      <div id="release-list"><div class="center-load"><span class="spinner"></span></div></div>
+    </div>
+
+    <!-- MUTFAK -->
+    <div class="tab" id="tab-mutfak">
+      <div class="section-head">
+        <div><div class="eyebrow">Prodüksiyon</div><h2>Mutfak</h2></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-sm btn-primary" id="beat-add" style="width:auto;">+ Beat Yükle</button>
+          <button class="btn btn-sm btn-ghost" id="preset-add" style="width:auto;">+ Preset Yükle</button>
+        </div>
+      </div>
+      <div class="eyebrow" style="margin:6px 0 12px;">Beatler</div>
+      <div id="beat-list"><div class="center-load"><span class="spinner"></span></div></div>
+      <div class="eyebrow" style="margin:26px 0 12px;">Mix Presetleri</div>
+      <div id="preset-list"></div>
+    </div>
+
+    <!-- STEMS -->
+    <div class="tab" id="tab-stems">
+      <div class="section-head">
+        <div><div class="eyebrow">Arşiv</div><h2>Stems</h2></div>
+        <button class="btn btn-sm btn-primary" id="stems-add" style="width:auto;">+ Stems Yükle</button>
+      </div>
+      <div id="stems-list"><div class="center-load"><span class="spinner"></span></div></div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="tab" id="tab-admin">
+      <div class="section-head">
+        <div><div class="eyebrow">Yönetim</div><h2>Üyeler</h2></div>
+        <button class="btn btn-sm btn-primary" id="user-add" style="width:auto;">+ Üye Ekle</button>
+      </div>
+      <div class="row" style="margin-bottom:14px;">
+        <input class="input" id="admin-search" placeholder="İsim veya e-posta ara..." style="border:none;background:transparent;padding:4px;">
+      </div>
+      <div id="admin-users"><div class="center-load"><span class="spinner"></span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-bg" id="m-demo"><div class="modal">
+  <h3>Demo Yükle</h3>
+  <div class="field"><label>Şarkı Adı</label><input id="dm-song" class="input" placeholder="örn. GECE VURUŞU" maxlength="90"></div>
+  <div class="field"><label>Demo İsmi (iç kayıt adı)</label><input id="dm-name" class="input" placeholder="örn. gece_v2_demo" maxlength="90"></div>
+  <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div><label>Beatmaker</label><input id="dm-beatmaker" class="input" placeholder="örn. Prod ismi" maxlength="60"></div>
+    <div><label>Producer (prod by.)</label><input id="dm-producer" class="input" placeholder="örn. müzikHan" maxlength="60"></div>
+  </div>
+  <div class="field"><label>Ses Dosyası (MP3/WAV · max 25MB)</label>
+    <div class="filedrop" id="dm-drop"><div class="ic">⬆</div><div class="t" id="dm-drop-t">Dosya seç</div></div>
+    <input id="dm-file" type="file" accept="audio/mpeg,audio/wav,audio/mp3,.mp3,.wav" class="hidden"></div>
+  <div class="progress" id="dm-prog"><i></i></div>
+  <div class="msg" id="dm-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="dm-up">Yükle</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-beat"><div class="modal">
+  <h3>Beat Yükle</h3>
+  <div class="field"><label>Beat Adı</label><input id="bt-name" class="input" placeholder="örn. NIGHTDRIVE 140" maxlength="90"></div>
+  <div class="field"><label>Prodüktör / Beatmaker</label><input id="bt-prod" class="input" placeholder="örn. senin ismin" maxlength="60"></div>
+  <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div><label>BPM</label><input id="bt-bpm" class="input" type="number" placeholder="140" min="40" max="300"></div>
+    <div><label>Ton (key)</label><input id="bt-key" class="input" placeholder="örn. Am" maxlength="12"></div>
+  </div>
+  <div class="field"><label>Ses Dosyası (MP3/WAV · max 25MB)</label>
+    <div class="filedrop" id="bt-drop"><div class="ic">⬆</div><div class="t" id="bt-drop-t">Dosya seç</div></div>
+    <input id="bt-file" type="file" accept="audio/mpeg,audio/wav,audio/mp3,.mp3,.wav" class="hidden"></div>
+  <div class="progress" id="bt-prog"><i></i></div>
+  <div class="msg" id="bt-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="bt-up">Yükle</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-preset"><div class="modal">
+  <h3>Preset Yükle</h3>
+  <div class="field"><label>Preset Adı</label><input id="pr-name" class="input" placeholder="örn. Vokal Zinciri v3" maxlength="90"></div>
+  <div class="field"><label>Preset Tarifi (ne işe yarar, nasıl kullanılır)</label><textarea id="pr-desc" class="input" placeholder="Zincir, pluginler, hangi vokal için ideal..." maxlength="800"></textarea></div>
+  <div class="field"><label>Preset Dosyası (max 50MB)</label>
+    <div class="filedrop" id="pr-drop"><div class="ic">⬆</div><div class="t" id="pr-drop-t">Dosya seç (.fxp, .zip, vs.)</div></div>
+    <input id="pr-file" type="file" class="hidden"></div>
+  <div class="progress" id="pr-prog"><i></i></div>
+  <div class="msg" id="pr-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="pr-up">Yükle</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-stems"><div class="modal">
+  <h3>Stems Yükle</h3>
+  <div class="field"><label>Şarkı Adı</label><input id="st-song" class="input" placeholder="örn. AVRASYA" maxlength="90"></div>
+  <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div><label>BPM</label><input id="st-bpm" class="input" type="number" placeholder="92" min="40" max="300"></div>
+    <div><label>Ton (key)</label><input id="st-key" class="input" placeholder="örn. F#m" maxlength="12"></div>
+  </div>
+  <div class="field"><label>Stems Arşivi (ZIP / RAR · max 300MB)</label>
+    <div class="filedrop" id="st-drop"><div class="ic">⬆</div><div class="t" id="st-drop-t">Dosya seç (.zip / .rar)</div></div>
+    <input id="st-file" type="file" accept=".zip,.rar,application/zip,application/x-rar-compressed" class="hidden"></div>
+  <div class="progress" id="st-prog"><i></i></div>
+  <div class="msg" id="st-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="st-up">Yükle</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-release"><div class="modal wide">
+  <h3>Şarkı Yükle · Yayın</h3>
+  <div class="field"><label>Sanatçı</label><input id="rl-artist" class="input" placeholder="Sanatçı adı"></div>
+  <div class="field"><label>Şarkı İsmi</label><input id="rl-song" class="input" placeholder="örn. VUR" maxlength="90"></div>
+  <div class="field"><label>Şarkı Kapağı (3000×3000 · JPG/PNG)</label>
+    <div class="filedrop" id="rl-cover-drop"><div class="ic">🖼</div><div class="t" id="rl-cover-t">Kapak seç</div></div>
+    <input id="rl-cover" type="file" accept="image/jpeg,image/png" class="hidden"></div>
+  <div class="field"><label>Şarkı Dosyası (WAV/MP3 · max 25MB)</label>
+    <div class="filedrop" id="rl-audio-drop"><div class="ic">⬆</div><div class="t" id="rl-audio-t">Ses dosyası seç</div></div>
+    <input id="rl-audio" type="file" accept="audio/mpeg,audio/wav,audio/mp3,.mp3,.wav" class="hidden"></div>
+  <div class="field"><label>Şarkı Sözleri</label><textarea id="rl-lyrics" class="input" placeholder="Sözleri buraya yaz..." style="min-height:140px;" maxlength="6000"></textarea></div>
+  <div class="field"><label>Yayınlanacağı Tarih</label><input id="rl-date" type="date" class="input"></div>
+
+  <div class="check-row">
+    <div class="grow"><div class="cr-t">Sözlerde explicit içerik var mı?</div><div class="cr-s">Küfür / +18 içerik durumu.</div></div>
+    <div class="seg" data-seg="explicit"><button data-v="yes">Evet</button><button data-v="no">Hayır</button></div>
+  </div>
+  <div class="check-row">
+    <div class="grow"><div class="cr-t">Beat lisansı bana ait</div><div class="cr-s">Beat'in yayın haklarına sahip misin?</div></div>
+    <div class="seg" data-seg="license"><button data-v="yes">Evet</button><button data-v="no">Hayır</button></div>
+  </div>
+  <div class="check-row">
+    <div class="grow"><div class="cr-t">Kullanıcı sözleşmesi</div><div class="cr-s"><span class="agree-link" id="rl-agree-link">Sözleşmeyi oku</span> — okudum, kabul ediyorum.</div></div>
+    <div class="seg" data-seg="agree"><button data-v="yes">Kabul</button></div>
+  </div>
+
+  <div class="progress" id="rl-prog"><i></i></div>
+  <div class="msg" id="rl-msg"></div>
+  <div class="modal-actions" style="flex-direction:column;">
+    <button class="btn btn-green" id="rl-up" style="padding:16px;font-size:.9rem;">🚀 ŞARKINI YAYINLA</button>
+    <button class="btn btn-ghost" data-close>İptal</button>
+  </div>
+</div></div>
+
+<div class="modal-bg" id="m-agree"><div class="modal wide">
+  <h3>müzikHan Yayın Sözleşmesi</h3>
+  <div class="agree-text" id="agree-body"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="agree-accept">Okudum, kabul ediyorum</button><button class="btn btn-ghost" data-close>Kapat</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-rate"><div class="modal">
+  <h3 id="rate-title">Puanla</h3>
+  <div id="rate-body"></div>
+  <div class="field" style="margin-top:6px;"><label>Not</label><textarea id="rate-note" class="input" placeholder="Geri bildirimini yaz..." maxlength="600"></textarea></div>
+  <div class="msg" id="rate-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="rate-save">Puanı Kaydet</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-user"><div class="modal">
+  <h3>Yeni Üye Ekle</h3>
+  <div class="field"><label>Görünen İsim</label><input id="nu-name" class="input" placeholder="örn. CESO" maxlength="60"></div>
+  <div class="field"><label>E-posta</label><input id="nu-email" type="email" class="input" placeholder="uye@mail.com"></div>
+  <div class="field"><label>Geçici Şifre (min 6 karakter)</label><input id="nu-pass" class="input" placeholder="••••••••"></div>
+  <div class="field"><label>Rol</label>
+    <select id="nu-role" class="input">
+      <option value="sanatci">Sanatçı</option>
+      <option value="produktor">Prodüktör</option>
+      <option value="ekip">Ekip Üyesi</option>
+      <option value="yonetici">Yönetici</option>
+    </select>
+  </div>
+  <div class="msg" id="nu-msg"></div>
+  <div class="modal-actions"><button class="btn btn-primary" id="nu-save">Üyeyi Oluştur</button><button class="btn btn-ghost" data-close>İptal</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-settings"><div class="modal">
+  <h3>Ayarlar</h3>
+  <div class="eyebrow" style="margin-bottom:10px;">Şifre Değiştir</div>
+  <div class="field"><label>Mevcut Şifre</label><input id="se-cur1" type="password" class="input" placeholder="••••••••"></div>
+  <div class="field"><label>Yeni Şifre</label><input id="se-new" type="password" class="input" placeholder="min 6 karakter"></div>
+  <button class="btn btn-primary" id="se-pass-save" style="margin-bottom:8px;">Şifreyi Güncelle</button>
+  <div class="msg" id="se-pass-msg"></div>
+  <div class="eyebrow" style="margin:22px 0 10px;">E-posta Değiştir</div>
+  <div class="field"><label>Mevcut Şifre</label><input id="se-cur2" type="password" class="input" placeholder="••••••••"></div>
+  <div class="field"><label>Yeni E-posta</label><input id="se-email" type="email" class="input" placeholder="yeni@mail.com"></div>
+  <button class="btn btn-primary" id="se-email-save">E-postayı Güncelle</button>
+  <div class="msg" id="se-email-msg"></div>
+  <div class="modal-actions"><button class="btn btn-ghost" data-close>Kapat</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-notif"><div class="modal">
+  <h3>Bildirimler</h3>
+  <div id="notif-list"></div>
+  <div class="modal-actions"><button class="btn btn-ghost" data-close>Kapat</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div class="notif-pop" id="notif-pop"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signOut, onAuthStateChanged, updateProfile, updatePassword, updateEmail, verifyBeforeUpdateEmail,
+  reauthenticateWithCredential, EmailAuthProvider }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  collection, addDoc, getDocs, query, where, orderBy, onSnapshot,
+  serverTimestamp, increment, limit }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-storage.js";
+
+/* ---- senin proje anahtarların (DOKUNMA) ---- */
+const firebaseConfig = {
+  apiKey: "AIzaSyBAEfpdzpoB2vtvhSDOZaGuSn24TCZjmsI",
+  authDomain: "ceso-istanbul.firebaseapp.com",
+  projectId: "ceso-istanbul",
+  storageBucket: "ceso-istanbul.firebasestorage.app",
+  messagingSenderId: "30392774343",
+  appId: "1:30392774343:web:8baffdf90c6e97404858e2",
+  measurementId: "G-24YEGLXWTD"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+/* ikinci app: yönetici yeni üye oluştururken kendi oturumu düşmesin */
+const secApp = initializeApp(firebaseConfig, "secondary");
+const secAuth = getAuth(secApp);
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => (s||"").replace(/[&<>"']/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const initial = n => (n||"?").trim().charAt(0).toUpperCase();
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2600);}
+function fmtDate(ts){ if(!ts) return ""; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString("tr-TR",{day:"2-digit",month:"short",year:"numeric"}); }
+function timeAgo(ts){ if(!ts) return ""; const d=ts.toDate?ts.toDate():new Date(ts); const s=Math.floor((Date.now()-d.getTime())/1000);
+  if(s<60)return "az önce"; if(s<3600)return Math.floor(s/60)+" dk önce"; if(s<86400)return Math.floor(s/3600)+" sa önce"; return Math.floor(s/86400)+" gün önce"; }
+function emptyState(ic,t){ return `<div class="empty-state"><div class="ic">${ic}</div><div class="t">${esc(t)}</div></div>`; }
+function loadingHTML(){ return `<div class="center-load"><span class="spinner"></span></div>`; }
+
+const ROLE_LABEL={ yonetici:"Yönetici", ekip:"Ekip Üyesi", sanatci:"Sanatçı", produktor:"Prodüktör" };
+const ROLE_CLASS={ yonetici:"role-yonetici", ekip:"role-ekip", sanatci:"role-sanatci", produktor:"role-produktor" };
+
+let me=null, myProfile=null, myRole=null;
+let myNotifs=[], notifPrimed=false, notifSeen=new Set();
+
+/* ===================== AUTH / LOGIN ===================== */
+let setupMode=false;
+$("#setup-toggle").onclick=()=>{
+  setupMode=!setupMode;
+  $("#setup-name").classList.toggle("hidden",!setupMode);
+  $("#l-submit").textContent=setupMode?"Yönetici Hesabı Oluştur":"Giriş Yap";
+  $("#setup-hint").textContent=setupMode?"Zaten hesabın var mı?":"İlk kurulum mu?";
+  $("#setup-toggle").textContent=setupMode?"Giriş yap":"Yönetici hesabı oluştur";
+  $("#l-msg").textContent="";
+};
+$("#l-submit").onclick=async ()=>{
+  const email=$("#l-email").value.trim(), pass=$("#l-pass").value, name=$("#l-name").value.trim();
+  const m=$("#l-msg"); m.className="msg";
+  if(!email||!pass){ m.classList.add("err"); m.textContent="E-posta ve şifre gerekli."; return; }
+  $("#l-submit").disabled=true;
+  try{
+    if(setupMode){
+      if(!name){ throw {message:"Yönetici adı gir."}; }
+      const cred=await createUserWithEmailAndPassword(auth,email,pass);
+      await updateProfile(cred.user,{displayName:name});
+      try{
+        await setDoc(doc(db,"users",cred.user.uid),{ displayName:name, email, role:"yonetici", createdAt:serverTimestamp() });
+        await setDoc(doc(db,"meta","app"),{ initialized:true, by:cred.user.uid, at:serverTimestamp() });
+      }catch(err){
+        await signOut(auth);
+        m.classList.add("err"); m.textContent="Kurulum zaten yapılmış. Yöneticiden hesap iste.";
+        return;
+      }
+    }else{
+      await signInWithEmailAndPassword(auth,email,pass);
+    }
+  }catch(e){
+    m.classList.add("err"); m.textContent=friendlyErr(e.code||e.message);
+  }finally{ $("#l-submit").disabled=false; }
+};
+function friendlyErr(c){
+  const map={
+    "auth/invalid-email":"Geçersiz e-posta.",
+    "auth/email-already-in-use":"Bu e-posta zaten kayıtlı.",
+    "auth/weak-password":"Şifre en az 6 karakter olmalı.",
+    "auth/invalid-credential":"E-posta veya şifre hatalı.",
+    "auth/user-not-found":"Böyle bir kullanıcı yok.",
+    "auth/wrong-password":"Şifre hatalı.",
+    "auth/too-many-requests":"Çok fazla deneme. Sonra dene."
+  };
+  return map[c] || ("Hata: "+c);
+}
+
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    const snap=await getDoc(doc(db,"users",user.uid));
+    if(!snap.exists()){
+      // yetkisiz / silinmiş hesap
+      $("#l-msg").className="msg err"; $("#l-msg").textContent="Hesabın bu panelde tanımlı değil. Yöneticiyle görüş.";
+      await signOut(auth); return;
+    }
+    me=user; myProfile=snap.data(); myRole=myProfile.role||"sanatci";
+    enterApp();
+  }else{
+    me=null; myProfile=null; myRole=null;
+    $("#view-app").style.display="none";
+    $("#view-login").style.display="flex";
+  }
+});
+
+function enterApp(){
+  $("#view-login").style.display="none";
+  $("#view-app").style.display="block";
+  // rol bazlı nav
+  document.querySelectorAll('.nav button[data-roles]').forEach(b=>{
+    const ok=b.dataset.roles.split(",").includes(myRole);
+    b.classList.toggle("hidden",!ok);
+  });
+  // chip
+  $("#uc-av").textContent=initial(myProfile.displayName);
+  $("#uc-name").textContent=myProfile.displayName;
+  $("#uc-role").textContent=ROLE_LABEL[myRole]||myRole;
+  $("#dash-name").textContent=myProfile.displayName;
+  $("#dash-role").innerHTML=`<span class="role-badge ${ROLE_CLASS[myRole]||''}">${ROLE_LABEL[myRole]||myRole}</span>`;
+  switchTab("dash");
+  startNotifs();
+}
+
+function switchTab(t){
+  const btn=document.querySelector(`.nav button[data-tab="${t}"]`);
+  if(btn && btn.classList.contains("hidden")) t="dash";
+  document.querySelectorAll(".nav button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  $("#tab-"+t).classList.add("active");
+  if(t==="dash") loadDash();
+  if(t==="demos") loadDemos();
+  if(t==="release") loadReleases();
+  if(t==="mutfak"){ loadBeats(); loadPresets(); }
+  if(t==="stems") loadStems();
+  if(t==="admin" && myRole==="yonetici") loadUsers();
+}
+document.querySelectorAll(".nav button[data-tab]").forEach(b=> b.onclick=()=>switchTab(b.dataset.tab));
+
+/* ===================== USER MENU ===================== */
+const um=$("#usermenu");
+$("#user-chip").onclick=(e)=>{ e.stopPropagation(); um.classList.toggle("open"); };
+document.addEventListener("click",e=>{ if(!um.contains(e.target) && e.target!==$("#user-chip") && !$("#user-chip").contains(e.target)) um.classList.remove("open"); });
+$("#um-logout").onclick=()=>{ um.classList.remove("open"); signOut(auth); };
+$("#um-settings").onclick=()=>{ um.classList.remove("open"); openModal("m-settings"); ["se-cur1","se-new","se-cur2","se-email"].forEach(i=>$("#"+i).value=""); $("#se-pass-msg").textContent=""; $("#se-email-msg").textContent=""; };
+
+/* ===================== MODAL YÖNETİMİ ===================== */
+function openModal(id){ $("#"+id).classList.add("open"); }
+function closeModal(id){ $("#"+id).classList.remove("open"); }
+document.querySelectorAll(".modal-bg").forEach(mb=>{
+  mb.addEventListener("click",e=>{ if(e.target===mb) mb.classList.remove("open"); });
+  mb.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>mb.classList.remove("open"));
+});
+
+/* ===================== DASHBOARD ===================== */
+async function loadDash(){
+  $("#dash-sub").textContent="Bugün ne üretiyoruz?";
+  const grid=$("#dash-grid"); grid.innerHTML=loadingHTML();
+  const cards=[];
+  async function count(col){ try{ const s=await getDocs(collection(db,col)); return s.size; }catch(e){ return "—"; } }
+  if(["yonetici","ekip"].includes(myRole)) cards.push(["Demolar", await count("demos")]);
+  if(["yonetici","ekip","sanatci"].includes(myRole)) cards.push(["Yayınlar", await count("releases")]);
+  if(["yonetici","ekip","produktor"].includes(myRole)) cards.push(["Beatler", await count("beats")]);
+  if(["yonetici","ekip","produktor"].includes(myRole)) cards.push(["Presetler", await count("presets")]);
+  if(["yonetici","ekip","produktor"].includes(myRole)) cards.push(["Stems", await count("stems")]);
+  if(myRole==="yonetici") cards.push(["Üyeler", await count("users")]);
+  grid.innerHTML="";
+  cards.forEach(([l,n])=>{ const d=document.createElement("div"); d.className="dash-card"; d.innerHTML=`<div class="n">${n}</div><div class="l">${l}</div>`; grid.appendChild(d); });
+}
+
+/* ===================== ORTAK: yıldız puanı ===================== */
+function starRow(key,label,val){
+  let h=`<div class="rate-row"><div class="rl">${label}</div><div class="stars" data-cat="${key}">`;
+  for(let i=1;i<=5;i++) h+=`<span class="star${i<=val?' on':''}" data-v="${i}">★</span>`;
+  h+=`</div></div>`;
+  return h;
+}
+function wireStars(root){
+  root.querySelectorAll(".stars").forEach(s=>{
+    s.querySelectorAll(".star").forEach(st=>st.onclick=()=>{
+      const v=Number(st.dataset.v); s.dataset.val=v;
+      s.querySelectorAll(".star").forEach(x=>x.classList.toggle("on",Number(x.dataset.v)<=v));
+    });
+  });
+}
+function overall(sums,keys,count){ if(!count) return null; let t=0; keys.forEach(k=>t+=(sums[k]||0)/count); return t/keys.length; }
+
+/* ===================== DEMOLAR ===================== */
+const DEMO_CATS=[["song","Şarkı","sumSong"],["lyrics","Sözler","sumLyrics"],["mix","Mix & Mastering","sumMix"]];
+let pickDemo=null;
+$("#demo-add").onclick=()=>{ pickDemo=null; ["dm-song","dm-name","dm-beatmaker","dm-producer"].forEach(i=>$("#"+i).value=""); $("#dm-drop").classList.remove("has"); $("#dm-drop-t").textContent="Dosya seç"; $("#dm-msg").textContent=""; $("#dm-prog").classList.remove("show"); openModal("m-demo"); };
+$("#dm-drop").onclick=()=>$("#dm-file").click();
+$("#dm-file").onchange=e=>{ const f=e.target.files[0]; if(!f)return; if(f.size>25*1024*1024){ $("#dm-msg").className="msg err"; $("#dm-msg").textContent="Dosya 25MB'tan büyük."; return;} pickDemo=f; $("#dm-drop").classList.add("has"); $("#dm-drop-t").textContent=f.name+" · "+(f.size/1048576).toFixed(1)+"MB"; $("#dm-msg").textContent=""; };
+$("#dm-up").onclick=async ()=>{
+  const song=$("#dm-song").value.trim(), m=$("#dm-msg"); m.className="msg";
+  if(!song){ m.classList.add("err"); m.textContent="Şarkı adı gir."; return; }
+  if(!pickDemo){ m.classList.add("err"); m.textContent="Ses dosyası seç."; return; }
+  $("#dm-up").disabled=true; const prog=$("#dm-prog"),bar=prog.querySelector("i"); prog.classList.add("show");
+  try{
+    const safe=pickDemo.name.replace(/[^\w.\-]/g,"_"); const path=`demos/${me.uid}/${Date.now()}_${safe}`;
+    const task=uploadBytesResumable(ref(storage,path),pickDemo,{contentType:pickDemo.type});
+    task.on("state_changed",s=>bar.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+"%");
+    await task; const url=await getDownloadURL(ref(storage,path));
+    await addDoc(collection(db,"demos"),{
+      songName:song, demoName:$("#dm-name").value.trim(), beatmaker:$("#dm-beatmaker").value.trim(), producer:$("#dm-producer").value.trim(),
+      audioURL:url, storagePath:path, uploaderId:me.uid, uploaderName:myProfile.displayName,
+      createdAt:serverTimestamp(), sumSong:0,sumLyrics:0,sumMix:0, ratingCount:0
+    });
+    closeModal("m-demo"); toast("Demo yüklendi 🔥"); if($("#tab-demos").classList.contains("active")) loadDemos();
+  }catch(err){ m.classList.add("err"); m.textContent="Hata: "+(err.code||err.message); }
+  finally{ $("#dm-up").disabled=false; }
+};
+async function loadDemos(){
+  const box=$("#demo-list"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(query(collection(db,"demos"),orderBy("createdAt","desc")));
+    if(snap.empty){ box.innerHTML=emptyState("🎧","Henüz demo yok. İlk demoyu yükle."); return; }
+    box.innerHTML="";
+    snap.forEach(d=>box.appendChild(demoCard(d.id,d.data())));
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+function demoCard(id,data){
+  const ov=overall(data,["sumSong","sumLyrics","sumMix"],data.ratingCount);
+  const el=document.createElement("div"); el.className="card";
+  const canDel = myRole==="yonetici" || data.uploaderId===me.uid;
+  el.innerHTML=`
+    <div class="card-head">
+      <div class="cover"><div class="ph">🎵</div></div>
+      <div class="card-id">
+        <div class="card-title">${esc(data.songName)}</div>
+        <div class="card-sub">Yükleyen: ${esc(data.uploaderName||"-")} · ${fmtDate(data.createdAt)}${data.beatmaker?` · beat: ${esc(data.beatmaker)}`:""}</div>
+        <div class="card-meta">
+          ${ov?`<span class="tag gold">★ ${ov.toFixed(1)} / 5 · ${data.ratingCount} puan</span>`:`<span class="tag">puan yok</span>`}
+        </div>
+      </div>
+      ${data.producer?`<div class="prodby">prod by. ${esc(data.producer)}</div>`:""}
+    </div>
+    <audio controls preload="none" src="${esc(data.audioURL)}"></audio>
+    <div class="card-actions">
+      <button class="linklike act-rate">★ PUANLA</button>
+      ${canDel?`<button class="linklike del act-del" style="margin-left:auto;">SİL</button>`:""}
+    </div>`;
+  el.querySelector(".act-rate").onclick=()=>openRate("demo","demos",id,data,DEMO_CATS,data.songName);
+  el.querySelector(".act-del") && (el.querySelector(".act-del").onclick=()=>delItem("demos",id,data,"demo-list",loadDemos));
+  return el;
+}
+
+/* ===================== MUTFAK: BEATLER ===================== */
+const BEAT_CATS=[["type","Type","sumType"],["vibe","Vibe","sumVibe"],["melody","Melody","sumMelody"],["drum","Drum","sumDrum"]];
+let pickBeat=null;
+$("#beat-add").onclick=()=>{ pickBeat=null; ["bt-name","bt-prod","bt-bpm","bt-key"].forEach(i=>$("#"+i).value=""); $("#bt-drop").classList.remove("has"); $("#bt-drop-t").textContent="Dosya seç"; $("#bt-msg").textContent=""; $("#bt-prog").classList.remove("show"); openModal("m-beat"); };
+$("#bt-drop").onclick=()=>$("#bt-file").click();
+$("#bt-file").onchange=e=>{ const f=e.target.files[0]; if(!f)return; if(f.size>25*1024*1024){ $("#bt-msg").className="msg err"; $("#bt-msg").textContent="Dosya 25MB'tan büyük."; return;} pickBeat=f; $("#bt-drop").classList.add("has"); $("#bt-drop-t").textContent=f.name+" · "+(f.size/1048576).toFixed(1)+"MB"; };
+$("#bt-up").onclick=async ()=>{
+  const name=$("#bt-name").value.trim(), m=$("#bt-msg"); m.className="msg";
+  if(!name){ m.classList.add("err"); m.textContent="Beat adı gir."; return; }
+  if(!pickBeat){ m.classList.add("err"); m.textContent="Ses dosyası seç."; return; }
+  $("#bt-up").disabled=true; const prog=$("#bt-prog"),bar=prog.querySelector("i"); prog.classList.add("show");
+  try{
+    const safe=pickBeat.name.replace(/[^\w.\-]/g,"_"); const path=`beats/${me.uid}/${Date.now()}_${safe}`;
+    const task=uploadBytesResumable(ref(storage,path),pickBeat,{contentType:pickBeat.type});
+    task.on("state_changed",s=>bar.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+"%");
+    await task; const url=await getDownloadURL(ref(storage,path));
+    await addDoc(collection(db,"beats"),{
+      name, producerName:$("#bt-prod").value.trim(), bpm:Number($("#bt-bpm").value)||null, key:$("#bt-key").value.trim(),
+      audioURL:url, storagePath:path, uploaderId:me.uid, uploaderName:myProfile.displayName,
+      createdAt:serverTimestamp(), sumType:0,sumVibe:0,sumMelody:0,sumDrum:0, ratingCount:0
+    });
+    closeModal("m-beat"); toast("Beat yüklendi 🎹"); if($("#tab-mutfak").classList.contains("active")) loadBeats();
+  }catch(err){ m.classList.add("err"); m.textContent="Hata: "+(err.code||err.message); }
+  finally{ $("#bt-up").disabled=false; }
+};
+async function loadBeats(){
+  const box=$("#beat-list"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(query(collection(db,"beats"),orderBy("createdAt","desc")));
+    if(snap.empty){ box.innerHTML=emptyState("🎹","Henüz beat yok."); return; }
+    box.innerHTML=""; snap.forEach(d=>box.appendChild(beatCard(d.id,d.data())));
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+function beatCard(id,data){
+  const ov=overall(data,["sumType","sumVibe","sumMelody","sumDrum"],data.ratingCount);
+  const el=document.createElement("div"); el.className="card";
+  const canDel = myRole==="yonetici" || data.uploaderId===me.uid;
+  el.innerHTML=`
+    <div class="card-head">
+      <div class="cover"><div class="ph">🎹</div></div>
+      <div class="card-id">
+        <div class="card-title">${esc(data.name)}</div>
+        <div class="card-sub">${esc(data.producerName||data.uploaderName||"-")} · ${fmtDate(data.createdAt)}</div>
+        <div class="card-meta">
+          ${data.bpm?`<span class="tag">${data.bpm} BPM</span>`:""}
+          ${data.key?`<span class="tag">${esc(data.key)}</span>`:""}
+          ${ov?`<span class="tag gold">★ ${ov.toFixed(1)} / 5 · ${data.ratingCount} puan</span>`:`<span class="tag">puan yok</span>`}
+        </div>
+      </div>
+    </div>
+    <audio controls preload="none" src="${esc(data.audioURL)}"></audio>
+    <div class="card-actions">
+      <button class="linklike act-rate">★ PUANLA</button>
+      ${canDel?`<button class="linklike del act-del" style="margin-left:auto;">SİL</button>`:""}
+    </div>`;
+  el.querySelector(".act-rate").onclick=()=>openRate("beat","beats",id,data,BEAT_CATS,data.name);
+  el.querySelector(".act-del") && (el.querySelector(".act-del").onclick=()=>delItem("beats",id,data,"beat-list",loadBeats));
+  return el;
+}
+
+/* ===================== MUTFAK: PRESETLER ===================== */
+let pickPreset=null;
+$("#preset-add").onclick=()=>{ pickPreset=null; ["pr-name","pr-desc"].forEach(i=>$("#"+i).value=""); $("#pr-drop").classList.remove("has"); $("#pr-drop-t").textContent="Dosya seç (.fxp, .zip, vs.)"; $("#pr-msg").textContent=""; $("#pr-prog").classList.remove("show"); openModal("m-preset"); };
+$("#pr-drop").onclick=()=>$("#pr-file").click();
+$("#pr-file").onchange=e=>{ const f=e.target.files[0]; if(!f)return; if(f.size>50*1024*1024){ $("#pr-msg").className="msg err"; $("#pr-msg").textContent="Dosya 50MB'tan büyük."; return;} pickPreset=f; $("#pr-drop").classList.add("has"); $("#pr-drop-t").textContent=f.name+" · "+(f.size/1048576).toFixed(1)+"MB"; };
+$("#pr-up").onclick=async ()=>{
+  const name=$("#pr-name").value.trim(), m=$("#pr-msg"); m.className="msg";
+  if(!name){ m.classList.add("err"); m.textContent="Preset adı gir."; return; }
+  if(!pickPreset){ m.classList.add("err"); m.textContent="Dosya seç."; return; }
+  $("#pr-up").disabled=true; const prog=$("#pr-prog"),bar=prog.querySelector("i"); prog.classList.add("show");
+  try{
+    const safe=pickPreset.name.replace(/[^\w.\-]/g,"_"); const path=`presets/${me.uid}/${Date.now()}_${safe}`;
+    const task=uploadBytesResumable(ref(storage,path),pickPreset,{contentType:pickPreset.type||"application/octet-stream"});
+    task.on("state_changed",s=>bar.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+"%");
+    await task; const url=await getDownloadURL(ref(storage,path));
+    await addDoc(collection(db,"presets"),{
+      name, description:$("#pr-desc").value.trim(), fileURL:url, fileName:pickPreset.name, storagePath:path,
+      uploaderId:me.uid, uploaderName:myProfile.displayName, createdAt:serverTimestamp()
+    });
+    closeModal("m-preset"); toast("Preset yüklendi 🎛"); if($("#tab-mutfak").classList.contains("active")) loadPresets();
+  }catch(err){ m.classList.add("err"); m.textContent="Hata: "+(err.code||err.message); }
+  finally{ $("#pr-up").disabled=false; }
+};
+async function loadPresets(){
+  const box=$("#preset-list"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(query(collection(db,"presets"),orderBy("createdAt","desc")));
+    if(snap.empty){ box.innerHTML=emptyState("🎛","Henüz preset yok."); return; }
+    box.innerHTML="";
+    snap.forEach(x=>{ const d=x.data();
+      const canDel=myRole==="yonetici"||d.uploaderId===me.uid;
+      const row=document.createElement("div"); row.className="row";
+      row.innerHTML=`<div class="grow"><div class="t">🎛 ${esc(d.name)}</div>
+        <div class="s">${esc(d.uploaderName||"-")} · ${fmtDate(d.createdAt)}</div>
+        ${d.description?`<div class="s" style="color:#c2c2c2;margin-top:6px;">${esc(d.description)}</div>`:""}</div>`;
+      const dl=document.createElement("a"); dl.className="dl-link"; dl.href=d.fileURL; dl.setAttribute("download",d.fileName||"preset"); dl.target="_blank"; dl.textContent="↓ İndir";
+      row.appendChild(dl);
+      if(canDel){ const del=document.createElement("button"); del.className="btn btn-sm btn-danger"; del.style.width="auto"; del.textContent="Sil"; del.onclick=()=>delItem("presets",x.id,d,"preset-list",loadPresets); row.appendChild(del); }
+      box.appendChild(row);
+    });
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+
+/* ===================== STEMS ===================== */
+let pickStems=null;
+$("#stems-add").onclick=()=>{ pickStems=null; ["st-song","st-bpm","st-key"].forEach(i=>$("#"+i).value=""); $("#st-drop").classList.remove("has"); $("#st-drop-t").textContent="Dosya seç (.zip / .rar)"; $("#st-msg").textContent=""; $("#st-prog").classList.remove("show"); openModal("m-stems"); };
+$("#st-drop").onclick=()=>$("#st-file").click();
+$("#st-file").onchange=e=>{ const f=e.target.files[0]; if(!f)return; if(f.size>300*1024*1024){ $("#st-msg").className="msg err"; $("#st-msg").textContent="Dosya 300MB'tan büyük."; return;} pickStems=f; $("#st-drop").classList.add("has"); $("#st-drop-t").textContent=f.name+" · "+(f.size/1048576).toFixed(1)+"MB"; };
+$("#st-up").onclick=async ()=>{
+  const song=$("#st-song").value.trim(), m=$("#st-msg"); m.className="msg";
+  if(!song){ m.classList.add("err"); m.textContent="Şarkı adı gir."; return; }
+  if(!pickStems){ m.classList.add("err"); m.textContent="ZIP/RAR seç."; return; }
+  $("#st-up").disabled=true; const prog=$("#st-prog"),bar=prog.querySelector("i"); prog.classList.add("show");
+  try{
+    const safe=pickStems.name.replace(/[^\w.\-]/g,"_"); const path=`stems/${me.uid}/${Date.now()}_${safe}`;
+    const task=uploadBytesResumable(ref(storage,path),pickStems,{contentType:pickStems.type||"application/octet-stream"});
+    task.on("state_changed",s=>bar.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+"%");
+    await task; const url=await getDownloadURL(ref(storage,path));
+    await addDoc(collection(db,"stems"),{
+      songName:song, bpm:Number($("#st-bpm").value)||null, key:$("#st-key").value.trim(),
+      fileURL:url, fileName:pickStems.name, storagePath:path, uploaderId:me.uid, uploaderName:myProfile.displayName, createdAt:serverTimestamp()
+    });
+    // prodüktörlere bildirim
+    await notifyProducers("📦 Yeni stems yüklendi", `${myProfile.displayName} · ${song}`);
+    closeModal("m-stems"); toast("Stems yüklendi 📦"); if($("#tab-stems").classList.contains("active")) loadStems();
+  }catch(err){ m.classList.add("err"); m.textContent="Hata: "+(err.code||err.message); }
+  finally{ $("#st-up").disabled=false; }
+};
+async function loadStems(){
+  const box=$("#stems-list"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(query(collection(db,"stems"),orderBy("createdAt","desc")));
+    if(snap.empty){ box.innerHTML=emptyState("📦","Henüz stems yok."); return; }
+    box.innerHTML="";
+    snap.forEach(x=>{ const d=x.data();
+      const canDel=myRole==="yonetici"||d.uploaderId===me.uid;
+      const row=document.createElement("div"); row.className="row";
+      row.innerHTML=`<div class="grow"><div class="t">📦 ${esc(d.songName)}</div>
+        <div class="s">${esc(d.uploaderName||"-")} · ${fmtDate(d.createdAt)}</div>
+        <div class="card-meta">${d.bpm?`<span class="tag">${d.bpm} BPM</span>`:""}${d.key?`<span class="tag">${esc(d.key)}</span>`:""}</div></div>`;
+      const dl=document.createElement("a"); dl.className="dl-link"; dl.href=d.fileURL; dl.setAttribute("download",d.fileName||"stems"); dl.target="_blank"; dl.textContent="↓ İndir";
+      row.appendChild(dl);
+      if(canDel){ const del=document.createElement("button"); del.className="btn btn-sm btn-danger"; del.style.width="auto"; del.textContent="Sil"; del.onclick=()=>delItem("stems",x.id,d,"stems-list",loadStems); row.appendChild(del); }
+      box.appendChild(row);
+    });
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+
+/* ===================== RELEASE / YAYIN ===================== */
+const AGREEMENT_HTML=`
+<p>İşbu sözleşme, eseri müzikHan paneli üzerinden yayına gönderen <b>Sanatçı</b> ile <b>müzikHan (Label)</b> arasında, gönderim anında elektronik olarak kurulmuştur.</p>
+<h4>1. HAK DEVRİ</h4>
+<p>Sanatçı; gönderdiği esere ait master, dijital dağıtım, çoğaltma, yayma, kamuya iletim ve umuma arz haklarını, dünya genelinde ve süresiz olarak münhasıran müzikHan'a devreder. Label, eseri dilediği platformda yayınlama, yayından kaldırma ve düzenleme hakkına tek başına sahiptir.</p>
+<h4>2. KARAR YETKİSİ</h4>
+<p>Eserin yayın tarihi, kapak, başlık, sürüm ve dağıtım stratejisi dahil tüm yayın kararları münhasıran müzikHan'a aittir. Sanatçı bu kararlara itiraz hakkından feragat eder.</p>
+<h4>3. BEYAN VE TAAHHÜT</h4>
+<p>Sanatçı; eserin kendisine ait özgün bir çalışma olduğunu, üçüncü kişilerin haklarını ihlal etmediğini, beat/örnekleme lisanslarının temin edildiğini ve doğabilecek tüm hukuki sorumluluğun kendisine ait olduğunu kabul ve taahhüt eder.</p>
+<h4>4. MALİ HÜKÜMLER</h4>
+<p>Eserden doğacak gelirlerin paylaşımı, müzikHan'ın yürürlükteki politikaları çerçevesinde belirlenir ve Label tarafından tek taraflı olarak güncellenebilir.</p>
+<h4>5. FESİH</h4>
+<p>müzikHan dilediği zaman, gerekçe göstermeksizin eseri yayından kaldırabilir veya sözleşmeyi feshedebilir. Bu durumda devredilen haklar Label'da kalmaya devam eder.</p>
+<h4>6. KABUL</h4>
+<p>"Okudum, kabul ediyorum" seçeneğini işaretleyip eseri gönderen Sanatçı, yukarıdaki tüm maddeleri okuduğunu, anladığını ve kayıtsız şartsız kabul ettiğini beyan eder.</p>
+<p style="color:#777;font-size:.66rem;margin-top:14px;">Not: Bu metin bir taslaktır; resmî kullanım öncesi bir hukuk danışmanına gözden geçirtmen önerilir.</p>`;
+$("#agree-body").innerHTML=AGREEMENT_HTML;
+let segState={explicit:null,license:null,agree:false};
+document.querySelectorAll(".seg").forEach(seg=>{
+  seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const k=seg.dataset.seg, v=b.dataset.v;
+    if(k==="agree"){ segState.agree=true; b.classList.add("on-yes"); return; }
+    segState[k]= v==="yes";
+    seg.querySelectorAll("button").forEach(x=>{ x.classList.remove("on-yes","on-no"); });
+    b.classList.add(v==="yes"?"on-yes":"on-no");
+  });
+});
+$("#rl-agree-link").onclick=()=>openModal("m-agree");
+$("#agree-accept").onclick=()=>{ segState.agree=true; const seg=document.querySelector('.seg[data-seg="agree"] button'); if(seg) seg.classList.add("on-yes"); closeModal("m-agree"); toast("Sözleşme kabul edildi"); };
+
+let pickCover=null, pickRlAudio=null;
+$("#release-add").onclick=()=>{
+  pickCover=null; pickRlAudio=null; segState={explicit:null,license:null,agree:false};
+  $("#rl-artist").value=myProfile.displayName||"";
+  $("#rl-artist").readOnly = (myRole==="sanatci");
+  ["rl-song","rl-lyrics","rl-date"].forEach(i=>$("#"+i).value="");
+  $("#rl-cover-drop").classList.remove("has"); $("#rl-cover-t").textContent="Kapak seç";
+  $("#rl-audio-drop").classList.remove("has"); $("#rl-audio-t").textContent="Ses dosyası seç";
+  document.querySelectorAll(".seg button").forEach(b=>b.classList.remove("on-yes","on-no"));
+  $("#rl-msg").textContent=""; $("#rl-prog").classList.remove("show");
+  const today=new Date().toISOString().split("T")[0]; $("#rl-date").min=today;
+  openModal("m-release");
+};
+$("#rl-cover-drop").onclick=()=>$("#rl-cover").click();
+$("#rl-cover").onchange=e=>{
+  const f=e.target.files[0]; if(!f)return;
+  if(!f.type.startsWith("image/")){ $("#rl-msg").className="msg err"; $("#rl-msg").textContent="Görsel seç."; return; }
+  const img=new Image(); img.onload=()=>{
+    if(img.width!==3000 || img.height!==3000){ $("#rl-msg").className="msg err"; $("#rl-msg").textContent=`Kapak 3000×3000 olmalı (seçilen: ${img.width}×${img.height}).`; pickCover=null; $("#rl-cover-drop").classList.remove("has"); $("#rl-cover-t").textContent="Kapak seç"; return; }
+    pickCover=f; $("#rl-cover-drop").classList.add("has"); $("#rl-cover-t").textContent=f.name+" · 3000×3000 ✓"; $("#rl-msg").textContent="";
+  };
+  img.onerror=()=>{ $("#rl-msg").className="msg err"; $("#rl-msg").textContent="Görsel okunamadı."; };
+  img.src=URL.createObjectURL(f);
+};
+$("#rl-audio-drop").onclick=()=>$("#rl-audio").click();
+$("#rl-audio").onchange=e=>{ const f=e.target.files[0]; if(!f)return; if(f.size>25*1024*1024){ $("#rl-msg").className="msg err"; $("#rl-msg").textContent="Ses 25MB'tan büyük."; return;} pickRlAudio=f; $("#rl-audio-drop").classList.add("has"); $("#rl-audio-t").textContent=f.name+" · "+(f.size/1048576).toFixed(1)+"MB"; $("#rl-msg").textContent=""; };
+$("#rl-up").onclick=async ()=>{
+  const m=$("#rl-msg"); m.className="msg";
+  const artist=$("#rl-artist").value.trim(), song=$("#rl-song").value.trim(), date=$("#rl-date").value;
+  if(!artist){ m.classList.add("err"); m.textContent="Sanatçı gir."; return; }
+  if(!song){ m.classList.add("err"); m.textContent="Şarkı ismi gir."; return; }
+  if(!pickCover){ m.classList.add("err"); m.textContent="3000×3000 kapak seç."; return; }
+  if(!pickRlAudio){ m.classList.add("err"); m.textContent="Şarkı dosyası seç."; return; }
+  if(!date){ m.classList.add("err"); m.textContent="Yayın tarihi seç."; return; }
+  if(segState.explicit===null){ m.classList.add("err"); m.textContent="Explicit sorusunu yanıtla."; return; }
+  if(segState.license===null){ m.classList.add("err"); m.textContent="Beat lisansı sorusunu yanıtla."; return; }
+  if(!segState.agree){ m.classList.add("err"); m.textContent="Sözleşmeyi kabul etmelisin."; return; }
+  $("#rl-up").disabled=true; const prog=$("#rl-prog"),bar=prog.querySelector("i"); prog.classList.add("show");
+  try{
+    const cSafe=pickCover.name.replace(/[^\w.\-]/g,"_"); const cPath=`releases/${me.uid}/${Date.now()}_cover_${cSafe}`;
+    await uploadBytesResumable(ref(storage,cPath),pickCover,{contentType:pickCover.type}); const coverURL=await getDownloadURL(ref(storage,cPath));
+    const aSafe=pickRlAudio.name.replace(/[^\w.\-]/g,"_"); const aPath=`releases/${me.uid}/${Date.now()}_audio_${aSafe}`;
+    const task=uploadBytesResumable(ref(storage,aPath),pickRlAudio,{contentType:pickRlAudio.type});
+    task.on("state_changed",s=>bar.style.width=Math.round(s.bytesTransferred/s.totalBytes*100)+"%");
+    await task; const audioURL=await getDownloadURL(ref(storage,aPath));
+    await addDoc(collection(db,"releases"),{
+      artistName:artist, songName:song, coverURL, coverPath:cPath, audioURL, audioPath:aPath,
+      lyrics:$("#rl-lyrics").value.trim(), releaseDate:date,
+      explicit:segState.explicit, beatLicenseMine:segState.license, agreementAccepted:true,
+      status:"beklemede", uploaderId:me.uid, uploaderName:myProfile.displayName, createdAt:serverTimestamp()
+    });
+    closeModal("m-release"); toast("Şarkı yayına gönderildi 🚀"); if($("#tab-release").classList.contains("active")) loadReleases();
+  }catch(err){ m.classList.add("err"); m.textContent="Hata: "+(err.code||err.message); }
+  finally{ $("#rl-up").disabled=false; }
+};
+async function loadReleases(){
+  const box=$("#release-list"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(query(collection(db,"releases"),orderBy("createdAt","desc")));
+    if(snap.empty){ box.innerHTML=emptyState("🚀","Henüz yayın yok. İlk şarkını yükle."); return; }
+    box.innerHTML="";
+    snap.forEach(d=>box.appendChild(releaseCard(d.id,d.data())));
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+function statusTag(s){
+  const map={beklemede:["tag","⏳ Beklemede"],onaylandi:["tag good","✓ Onaylandı"],yayinda:["tag good","● Yayında"],reddedildi:["tag bad","✕ Reddedildi"]};
+  const [c,t]=map[s]||map.beklemede; return `<span class="${c}">${t}</span>`;
+}
+function releaseCard(id,data){
+  const el=document.createElement("div"); el.className="card";
+  const canDel = myRole==="yonetici" || data.uploaderId===me.uid;
+  const canManage = myRole==="yonetici";
+  el.innerHTML=`
+    <div class="card-head">
+      <div class="cover">${data.coverURL?`<img src="${esc(data.coverURL)}">`:`<div class="ph">💿</div>`}</div>
+      <div class="card-id">
+        <div class="card-title">${esc(data.songName)}</div>
+        <div class="card-sub">${esc(data.artistName||"-")} · yayın: ${esc(data.releaseDate||"-")}</div>
+        <div class="card-meta">
+          ${statusTag(data.status)}
+          ${data.explicit?`<span class="tag bad">EXPLICIT</span>`:`<span class="tag">temiz</span>`}
+          <span class="tag ${data.beatLicenseMine?'good':'bad'}">${data.beatLicenseMine?'beat lisansı ✓':'beat lisansı ✕'}</span>
+        </div>
+      </div>
+    </div>
+    <audio controls preload="none" src="${esc(data.audioURL)}"></audio>
+    ${data.lyrics?`<div class="lyrics-box"><div class="lyrics-pre">${esc(data.lyrics)}</div></div>`:""}
+    <div class="card-actions">
+      ${canManage?`<select class="input rl-status" style="width:auto;padding:8px 10px;font-size:.72rem;">
+        <option value="beklemede"${data.status==="beklemede"?" selected":""}>Beklemede</option>
+        <option value="onaylandi"${data.status==="onaylandi"?" selected":""}>Onaylandı</option>
+        <option value="yayinda"${data.status==="yayinda"?" selected":""}>Yayında</option>
+        <option value="reddedildi"${data.status==="reddedildi"?" selected":""}>Reddedildi</option>
+      </select>`:""}
+      ${canDel?`<button class="linklike del act-del" style="margin-left:auto;">SİL</button>`:""}
+    </div>`;
+  if(canManage){ const sel=el.querySelector(".rl-status"); sel.onchange=async()=>{ try{ await updateDoc(doc(db,"releases",id),{status:sel.value}); toast("Durum güncellendi"); if(data.uploaderId!==me.uid) pushNotif(data.uploaderId,"💿 Yayın durumu",`${esc(data.songName)} → ${sel.options[sel.selectedIndex].text}`); }catch(e){ toast("Hata: "+(e.code||e.message)); } }; }
+  el.querySelector(".act-del") && (el.querySelector(".act-del").onclick=()=>delReleaseItem(id,data));
+  return el;
+}
+async function delReleaseItem(id,data){
+  if(!confirm(`"${data.songName}" yayını silinsin mi?`)) return;
+  try{
+    for(const p of [data.audioPath,data.coverPath]){ if(p){ try{ await deleteObject(ref(storage,p)); }catch(_){} } }
+    await deleteDoc(doc(db,"releases",id)); toast("Yayın silindi"); loadReleases();
+  }catch(e){ toast("Silinemedi: "+(e.code||e.message)); }
+}
+
+/* ===================== PUANLAMA (ORTAK) ===================== */
+let rateCtx=null;
+async function openRate(kind,col,id,data,cats,title){
+  rateCtx={kind,col,id,data,cats};
+  $("#rate-title").textContent=`Puanla · ${title}`;
+  $("#rate-note").value=""; $("#rate-msg").textContent="";
+  const body=$("#rate-body"); body.innerHTML=loadingHTML();
+  let prev={}; let prevNote="";
+  try{ const s=await getDoc(doc(db,col,id,"ratings",me.uid)); if(s.exists()){ prev=s.data(); prevNote=prev.note||""; } }catch(e){}
+  body.innerHTML=cats.map(([k,l])=>starRow(k,l,prev[k]||0)).join("");
+  wireStars(body);
+  cats.forEach(([k])=>{ const s=body.querySelector(`.stars[data-cat="${k}"]`); if(prev[k]) s.dataset.val=prev[k]; });
+  $("#rate-note").value=prevNote;
+  rateCtx.prev = (Object.keys(prev).length?prev:null);
+  openModal("m-rate");
+}
+$("#rate-save").onclick=async ()=>{
+  if(!rateCtx) return;
+  const {col,id,cats,prev,data}=rateCtx; const m=$("#rate-msg"); m.className="msg";
+  const vals={};
+  for(const [k,l] of cats){ const s=$("#rate-body").querySelector(`.stars[data-cat="${k}"]`); const v=Number(s.dataset.val||0); if(!v){ m.classList.add("err"); m.textContent=`"${l}" için yıldız seç.`; return; } vals[k]=v; }
+  const note=$("#rate-note").value.trim();
+  $("#rate-save").disabled=true;
+  try{
+    const upd={}; cats.forEach(([k,l,sk])=>{ upd[sk]=increment(vals[k]-(prev?prev[k]||0:0)); });
+    if(!prev) upd.ratingCount=increment(1);
+    await updateDoc(doc(db,col,id),upd);
+    await setDoc(doc(db,col,id,"ratings",me.uid),{...vals,note,raterId:me.uid,raterName:myProfile.displayName,updatedAt:serverTimestamp()});
+    // yükleyiciye bildirim
+    if(data.uploaderId && data.uploaderId!==me.uid){
+      const avg=(cats.reduce((a,[k])=>a+vals[k],0)/cats.length).toFixed(1);
+      const what = rateCtx.kind==="demo" ? "demonu" : "beat'ini";
+      pushNotif(data.uploaderId, `★ ${myProfile.displayName} ${what} puanladı`, `Ort. ${avg}/5${note?` · "${note.slice(0,60)}"`:""}`);
+    }
+    closeModal("m-rate"); toast("Puanın kaydedildi ★");
+    if(rateCtx.kind==="demo") loadDemos(); else loadBeats();
+  }catch(e){ m.classList.add("err"); m.textContent="Hata: "+(e.code||e.message); }
+  finally{ $("#rate-save").disabled=false; }
+};
+
+/* ===================== SİLME (ORTAK) ===================== */
+async function delItem(col,id,data,boxId,reload){
+  if(!confirm("Silinsin mi? Bu işlem geri alınamaz.")) return;
+  try{
+    if(data.storagePath){ try{ await deleteObject(ref(storage,data.storagePath)); }catch(_){} }
+    await deleteDoc(doc(db,col,id)); toast("Silindi"); reload();
+  }catch(e){ toast("Silinemedi: "+(e.code||e.message)); }
+}
+
+/* ===================== BİLDİRİMLER ===================== */
+async function pushNotif(toUid,text,sub){
+  if(!toUid) return;
+  try{ await addDoc(collection(db,"users",toUid,"notifs"),{ text, sub:sub||"", fromName:myProfile.displayName, read:false, createdAt:serverTimestamp() }); }catch(e){}
+}
+async function notifyProducers(text,sub){
+  try{
+    const s=await getDocs(query(collection(db,"users"),where("role","==","produktor")));
+    for(const u of s.docs){ if(u.id!==me.uid) await pushNotif(u.id,text,sub); }
+  }catch(e){}
+}
+function startNotifs(){
+  onSnapshot(query(collection(db,"users",me.uid,"notifs"),orderBy("createdAt","desc"),limit(40)),snap=>{
+    myNotifs=[]; snap.forEach(d=>myNotifs.push({id:d.id,...d.data()}));
+    myNotifs.forEach(n=>{ if(notifPrimed && !notifSeen.has(n.id) && !n.read) firePop(n.text,n.sub); notifSeen.add(n.id); });
+    notifPrimed=true; renderBell();
+  },()=>{});
+}
+let popTimer=null;
+function firePop(title,sub){
+  const p=$("#notif-pop"); p.innerHTML=`<div class="np-ic">🔔</div><div><div class="np-t">${esc(title)}</div>${sub?`<div class="np-s">${esc(sub)}</div>`:""}</div>`;
+  p.classList.add("show"); clearTimeout(popTimer); popTimer=setTimeout(()=>p.classList.remove("show"),3000);
+}
+function renderBell(){
+  const unread=myNotifs.filter(n=>!n.read).length; const dot=$("#bell-dot");
+  if(unread>0){ dot.textContent=unread>99?"99+":unread; dot.classList.add("show"); } else dot.classList.remove("show");
+  if($("#m-notif").classList.contains("open")) renderNotifList();
+}
+function renderNotifList(){
+  const box=$("#notif-list");
+  if(myNotifs.length===0){ box.innerHTML=`<div class="empty-state"><div class="t">Bildirim yok.</div></div>`; return; }
+  box.innerHTML="";
+  myNotifs.forEach(n=>{
+    const row=document.createElement("div"); row.className="req-row"; if(!n.read) row.style.borderColor="var(--line-strong)";
+    row.innerHTML=`<div class="grow"><div class="t" style="font-family:'Space Mono';font-size:.76rem;">${esc(n.text||"")}</div>
+      ${n.sub?`<div class="s" style="font-size:.64rem;color:var(--mut);margin-top:3px;">${esc(n.sub)}</div>`:""}
+      <div class="s" style="font-size:.58rem;color:var(--dim);margin-top:4px;">${timeAgo(n.createdAt)}</div></div>`;
+    box.appendChild(row);
+  });
+}
+$("#bell-btn").onclick=async ()=>{
+  renderNotifList(); openModal("m-notif");
+  for(const n of myNotifs){ if(!n.read){ try{ await updateDoc(doc(db,"users",me.uid,"notifs",n.id),{read:true}); }catch(_){} } }
+};
+
+/* ===================== AYARLAR (şifre / e-posta) ===================== */
+async function reauth(pass){
+  const cred=EmailAuthProvider.credential(me.email,pass);
+  await reauthenticateWithCredential(auth.currentUser,cred);
+}
+$("#se-pass-save").onclick=async ()=>{
+  const cur=$("#se-cur1").value, np=$("#se-new").value, m=$("#se-pass-msg"); m.className="msg";
+  if(!cur||!np){ m.classList.add("err"); m.textContent="Tüm alanları doldur."; return; }
+  if(np.length<6){ m.classList.add("err"); m.textContent="Yeni şifre min 6 karakter."; return; }
+  $("#se-pass-save").disabled=true;
+  try{ await reauth(cur); await updatePassword(auth.currentUser,np); m.className="msg ok"; m.textContent="Şifre güncellendi."; $("#se-cur1").value=""; $("#se-new").value=""; }
+  catch(e){ m.className="msg err"; m.textContent=friendlyErr(e.code||e.message); }
+  finally{ $("#se-pass-save").disabled=false; }
+};
+$("#se-email-save").onclick=async ()=>{
+  const cur=$("#se-cur2").value, ne=$("#se-email").value.trim(), m=$("#se-email-msg"); m.className="msg";
+  if(!cur||!ne){ m.classList.add("err"); m.textContent="Tüm alanları doldur."; return; }
+  $("#se-email-save").disabled=true;
+  try{
+    await reauth(cur); await verifyBeforeUpdateEmail(auth.currentUser,ne);
+    m.className="msg ok"; m.textContent="Yeni adresine doğrulama linki gönderildi. Linke tıkladıktan sonra e-postan güncellenecek; sonra yeni e-postayla giriş yap.";
+  }catch(e){ m.className="msg err"; m.textContent=friendlyErr(e.code||e.message); }
+  finally{ $("#se-email-save").disabled=false; }
+};
+
+/* ===================== YÖNETİM: ÜYELER ===================== */
+$("#user-add").onclick=()=>{ ["nu-name","nu-email","nu-pass"].forEach(i=>$("#"+i).value=""); $("#nu-role").value="sanatci"; $("#nu-msg").textContent=""; openModal("m-user"); };
+$("#nu-save").onclick=async ()=>{
+  const name=$("#nu-name").value.trim(), email=$("#nu-email").value.trim(), pass=$("#nu-pass").value, role=$("#nu-role").value, m=$("#nu-msg"); m.className="msg";
+  if(!name||!email||!pass){ m.classList.add("err"); m.textContent="Tüm alanları doldur."; return; }
+  if(pass.length<6){ m.classList.add("err"); m.textContent="Şifre min 6 karakter."; return; }
+  $("#nu-save").disabled=true;
+  try{
+    const cred=await createUserWithEmailAndPassword(secAuth,email,pass);
+    await updateProfile(cred.user,{displayName:name});
+    await setDoc(doc(db,"users",cred.user.uid),{ displayName:name, email, role, createdAt:serverTimestamp() });
+    await signOut(secAuth);
+    closeModal("m-user"); toast("Üye oluşturuldu ✓"); loadUsers();
+  }catch(e){ m.classList.add("err"); m.textContent=friendlyErr(e.code||e.message); }
+  finally{ $("#nu-save").disabled=false; }
+};
+let allUsers=[];
+async function loadUsers(){
+  const box=$("#admin-users"); box.innerHTML=loadingHTML();
+  try{
+    const snap=await getDocs(collection(db,"users"));
+    allUsers=[]; snap.forEach(d=>allUsers.push({uid:d.id,...d.data()}));
+    renderUsers();
+  }catch(e){ box.innerHTML=emptyState("⚠","Yüklenemedi: "+(e.code||e.message)); }
+}
+function renderUsers(){
+  const box=$("#admin-users"); const term=($("#admin-search").value||"").trim().toLowerCase();
+  let list=allUsers.filter(u=> !term || (u.displayName||"").toLowerCase().includes(term) || (u.email||"").toLowerCase().includes(term));
+  if(list.length===0){ box.innerHTML=emptyState("👥","Üye yok."); return; }
+  box.innerHTML="";
+  list.forEach(u=>{
+    const row=document.createElement("div"); row.className="row";
+    row.innerHTML=`<div class="uc-av" style="width:38px;height:38px;border-radius:50%;background:#161616;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Syncopate';color:#888;">${esc(initial(u.displayName))}</div>
+      <div class="grow"><div class="t">${esc(u.displayName)} <span class="role-badge ${ROLE_CLASS[u.role]||''}" style="margin-left:4px;">${ROLE_LABEL[u.role]||u.role}</span></div>
+      <div class="s">${esc(u.email)}</div></div>`;
+    if(u.uid!==me.uid){
+      const sel=document.createElement("select"); sel.className="input"; sel.style.cssText="width:auto;padding:8px 10px;font-size:.72rem;";
+      [["sanatci","Sanatçı"],["produktor","Prodüktör"],["ekip","Ekip Üyesi"],["yonetici","Yönetici"]].forEach(([v,l])=>{ const o=document.createElement("option"); o.value=v; o.textContent=l; if(u.role===v)o.selected=true; sel.appendChild(o); });
+      sel.onchange=async()=>{ try{ await updateDoc(doc(db,"users",u.uid),{role:sel.value}); u.role=sel.value; toast("Rol güncellendi"); renderUsers(); }catch(e){ toast("Hata: "+(e.code||e.message)); } };
+      row.appendChild(sel);
+      const del=document.createElement("button"); del.className="btn btn-sm btn-danger"; del.style.width="auto"; del.textContent="Sil";
+      del.onclick=async()=>{ if(!confirm(`${u.displayName} üyelikten silinsin mi? (Giriş yapamaz; auth kaydı Firebase konsolundan ayrıca silinebilir.)`))return; try{ await deleteDoc(doc(db,"users",u.uid)); toast("Üye silindi"); loadUsers(); }catch(e){ toast("Hata: "+(e.code||e.message)); } };
+      row.appendChild(del);
+    }else{
+      row.insertAdjacentHTML("beforeend",`<span class="tag">sen</span>`);
+    }
+    box.appendChild(row);
+  });
+}
+$("#admin-search").addEventListener("input",renderUsers);
+</script>
+
+<!-- mobil menü aç/kapa -->
+<script>
+(function(){
+  var t=document.getElementById('nav-toggle'), m=document.getElementById('nav-menu');
+  if(!t||!m) return;
+  t.addEventListener('click',function(e){ e.stopPropagation(); m.classList.toggle('open'); });
+  m.addEventListener('click',function(e){ if(e.target.closest('button[data-tab]')) m.classList.remove('open'); });
+  document.addEventListener('click',function(e){ if(!m.contains(e.target) && e.target!==t) m.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>
